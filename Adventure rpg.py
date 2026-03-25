@@ -19,7 +19,7 @@ cards = [
 enemies = [
     {"name": "Bandit Scout", "hp": 45, "damage": 8, "elite": False },
     {"name": "Controlled Wolf", "hp": 35, "damage": 9, "elite": False},
-    {"name": "Elite ", "hp": 90, "damage": 14, "elite": True}
+    {"name": "Elite Enforcer ", "hp": 90, "damage": 14, "elite": True}
 ]
 #       FOR THE FUNCTIONS!
 def intro():
@@ -78,5 +78,74 @@ def player_turn(enemy):
 
         else:
             print("Invalid command.")
+def enemy_turn(enemy):
+    roll = random.randint(1,100)
+
+    if enemy["elite"] and roll <= 30:
+        dmg = enemy["damage"] + 6
+        print(enemy["name"], "uses Heavy Slam!")
+    elif roll <= 25:
+        dmg = enemy["damage"] + 3
+        print(enemy["name"], "uses Quick Strike!")
+    else:
+        dmg = enemy["damage"]
+
+    player["hp"] -= dmg
+    print(enemy["name"], "deals", dmg, "damage!")
+
+def new_turn():
+    player["energy"] = min(player["energy"] + 2, player["max_energy"])
+
+def loot():
+    print("\nSearching loot...")
+    if random.randint(1,100) <= 30:
+        new_card = random.choice(cards)
+        cards.append(new_card)
+        print("You found a new skill:", new_card["name"])
+    else:
+        print("Nothing useful found.")
+
+def battle():
+    enemy = random.choice(enemies)
+
+    print("\nA", enemy["name"], "appears!")
+
+    turn = 1
+
+    while player["hp"] > 0 and enemy["hp"] > 0:
+
+        print("\n--- Turn", turn, "---")
+        print("Player HP:", player["hp"])
+        print("Enemy HP:", enemy["hp"])
+
+        show_energy()
+
+        player_turn(enemy)
+
+        if enemy["hp"] <= 0:
+            print("Enemy defeated!")
+            loot()
+            return
+
+        enemy_turn(enemy)
+
+        if player["hp"] <= 0:
+            print("You were defeated...")
+            return
+
+        new_turn()
+        turn += 1
+
+def game():
+    intro()
+
+    for _ in range(2):
+        battle()
+
+    print("\nYou defended the village...")
+    print("But something deeper controls the monsters...")
+
+# --- START ---
+game()
 
 
