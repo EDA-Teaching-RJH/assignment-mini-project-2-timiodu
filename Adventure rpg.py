@@ -176,19 +176,26 @@ def battle():
 
         if enemy["hp"] <= 0:
             print("Enemy defeated!")
-            loot()
-            return
 
-        # ENEMY STATUS
-        if not apply_status(enemy, enemy["name"]):
-            enemy_turn(enemy)
+        # rewards
+        player["energy"] = min(player["energy"] + 4, player["max_energy"])
+        player["hp"] = min(player["hp"] + 20, player["max_hp"])
 
-        if player["hp"] <= 0:
-            print("You were defeated...")
-            return
+        print("You gained 4 energy ⚡ and 20 HP ❤️!")
 
-        new_turn()
-        turn += 1
+        loot()
+        return
+
+    # ENEMY STATUS
+    if not apply_status(enemy, enemy["name"]):
+        enemy_turn(enemy)
+
+    if player["hp"] <= 0:
+        print("You were defeated...")
+        return
+
+    new_turn()
+    turn += 1
 
 def game():
     intro()
