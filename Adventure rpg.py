@@ -174,28 +174,29 @@ def battle():
         if not apply_status(player, "Player"):
             player_turn(enemy)
 
+        # ✅ CHECK ENEMY DEATH (NOW INSIDE LOOP)
         if enemy["hp"] <= 0:
             print("Enemy defeated!")
 
-        # rewards
-        player["energy"] = min(player["energy"] + 4, player["max_energy"])
-        player["hp"] = min(player["hp"] + 20, player["max_hp"])
+            # rewards
+            player["energy"] = min(player["energy"] + 4, player["max_energy"])
+            player["hp"] = min(player["hp"] + 20, player["max_hp"])
 
-        print("You gained 4 energy ⚡ and 20 HP ❤️!")
+            print("You gained 4 energy ⚡ and 20 HP ❤️!")
+            loot()
+            return
 
-        loot()
-        return
+        # ENEMY STATUS
+        if not apply_status(enemy, enemy["name"]):
+            enemy_turn(enemy)
 
-    # ENEMY STATUS
-    if not apply_status(enemy, enemy["name"]):
-        enemy_turn(enemy)
+        # PLAYER DEATH CHECK
+        if player["hp"] <= 0:
+            print("You were defeated...")
+            return
 
-    if player["hp"] <= 0:
-        print("You were defeated...")
-        return
-
-    new_turn()
-    turn += 1
+        new_turn()
+        turn += 1
 
 def game():
     intro()
@@ -213,9 +214,15 @@ def game():
         wait()
 
     print("\nYou defended the village...")
-    print("But something deeper controls the monsters...")
-
+    wait() 
+    print("But something deeper and sinister controls the monsters...")
+    wait()
+    print("It is up to you HERO, to find out the root of this chaos!")
+    wait()
+    print("THANKS FOR PLAYING! IK ITS SHORT BUT ITS ALOT HAHA")
+    
 # --- START ---
+
 game()
 
 
